@@ -1,28 +1,19 @@
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import org.slf4j.LoggerFactory
-
-fun main() {
-    Quizboard().start()
-}
-
+import redis.clients.jedis.Jedis
 
 class Quizboard {
-    private val logger = LoggerFactory.getLogger("Quizboard")
+    private val redisClient : Jedis = Jedis("localhost", 6379)
 
-    fun start(){
-        embeddedServer(Netty, port = 8081, host = "0.0.0.0") {
-            routing {
-                get("/") {
-                    call.respondText("Hello World!")
-                    logger.info("Received connection")
-                }
-            }
-        }.start(wait = true)
+    companion object {
+        const val RESULTS_KEY = "results"
+        const val TEAMS_KEY = "teams"
     }
+
+    fun getResults(teamName : String): String {
+        return redisClient.get("$RESULTS_KEY:$teamName")
+    }
+
+    fun getTeams(): Set<String> {
+        return redisClient.smembers(TEAMS_KEY)
+    }
+
 }
-
-

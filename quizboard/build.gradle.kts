@@ -1,6 +1,7 @@
 val kotlinVersion = "1.5.31"
 val ktorVersion = "1.6.4"
 val junitJupiterVersion = "5.8.1"
+val jedisVersion = "3.7.0"
 
 plugins {
     application
@@ -33,4 +34,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junitJupiterVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion")
+
+    implementation("com.github.redis:jedis:$jedisVersion")
 }
